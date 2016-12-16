@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using Multimedia.Midi;
 
 
 namespace MidiToPlist
@@ -21,7 +20,6 @@ namespace MidiToPlist
             string nowpath = AppDomain.CurrentDomain.BaseDirectory;
             compatable = ReadCompatable(nowpath + "compatable.txt");
 
-            //MidiFileReader _smr = new MidiFileReader(filepath);
             //ArrayList _notes = GetNote(_smr);
 
             if (args.Length >= 1)
@@ -76,6 +74,52 @@ namespace MidiToPlist
                 sr.Close();
                 fs.Close();
             }
+        }
+
+
+        public enum ReadType
+        {
+            ReadLine,
+            ReadToEnd
+        }
+        public Object ReadFile(string filepath,ReadType type)
+        {
+
+            Object readedText = new Object();
+
+            StreamReader sr = null;
+            try
+            {
+                sr = File.OpenText(filepath);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+
+            string text;
+            if (type == ReadType.ReadLine)
+            {
+                //逐行读取
+                ArrayList textline = new ArrayList();
+                while ((text = sr.ReadLine()) != null)
+                {
+                    textline.Add(textline);
+                }
+
+                readedText = textline;
+            }
+            else
+            {    
+                //直接读取
+                text = sr.ReadToEnd();
+                readedText = text;
+            }
+            sr.Close();
+            sr.Dispose();
+
+            return readedText;
         }
 
         //读取配置表
